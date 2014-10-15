@@ -64,9 +64,7 @@ public:
 	// add FixedPoint to this
 	FixedPoint &operator += (const FixedPoint &rhs)
 	{
-		/* Should the size change? */
-		//setWidth(std::max(m_width, rhs.m_width) + 1);
-		
+		setWidth(std::max(m_width, rhs.m_width) + 1);
 		std::complex<int64_t>::operator+=(rhs);
 		checkSize();
 		return *this;
