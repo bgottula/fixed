@@ -75,6 +75,20 @@ public:
 	{
 		return lhs += rhs;
 	}
+
+	// complex multiplication
+	FixedPoint &operator *= (const FixedPoint &rhs)
+	{
+		setWidth(m_width + rhs.m_width + 1);
+		std::complex<int64_t>::operator*=(rhs);
+		checkSize();
+		return *this;
+	}
+
+	friend FixedPoint operator * (FixedPoint lhs, const FixedPoint &rhs)
+	{
+		return lhs *= rhs;
+	}
 	
 
 	FixedPoint &truncateBy(unsigned int numLsbsToRemove)
