@@ -13,18 +13,18 @@
  * add methods to convert to floating-point types.
  */
 
-class FixedPoint : public std::complex<std::int64_t>
+class ComplexFixedPoint : public std::complex<std::int64_t>
 {
 public:
 
-	FixedPoint(std::int64_t r, std::int64_t i, unsigned int width)
+	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width)
 		: std::complex<int64_t>(r, i)
 	{
 		setWidth(width);
 		checkSize();	
 	}
 
-	FixedPoint(std::complex<int64_t> &c, unsigned int width)
+	ComplexFixedPoint(std::complex<int64_t> &c, unsigned int width)
 		: std::complex<int64_t>(c)
 	{
 		setWidth(width);
@@ -38,7 +38,7 @@ public:
 	int64_t getMaxVal(void) { return m_maxVal; }
 
 
-	FixedPoint &operator = (const FixedPoint &rhs)
+	ComplexFixedPoint &operator = (const ComplexFixedPoint &rhs)
 	{
 		assert(rhs.m_width == m_width);
 		std::complex<int64_t>::operator=(rhs);
@@ -46,14 +46,14 @@ public:
 	}
 
 
-	FixedPoint &operator >> (const int nbits)
+	ComplexFixedPoint &operator >> (const int nbits)
 	{
 		real(real() >> nbits);
 		imag(imag() >> nbits);
 		return (*this);
 	}
 
-	FixedPoint &operator << (const int nbits)
+	ComplexFixedPoint &operator << (const int nbits)
 	{
 		real(real() << nbits);
 		imag(imag() << nbits);
@@ -61,8 +61,8 @@ public:
 	}
 
 	
-	// add FixedPoint to this
-	FixedPoint &operator += (const FixedPoint &rhs)
+	// add ComplexFixedPoint to this
+	ComplexFixedPoint &operator += (const ComplexFixedPoint &rhs)
 	{
 		setWidth(std::max(m_width, rhs.m_width) + 1);
 		std::complex<int64_t>::operator+=(rhs);
@@ -71,13 +71,13 @@ public:
 	}
 
 
-	friend FixedPoint operator+(FixedPoint lhs, const FixedPoint &rhs)
+	friend ComplexFixedPoint operator+(ComplexFixedPoint lhs, const ComplexFixedPoint &rhs)
 	{
 		return lhs += rhs;
 	}
 
 	// complex multiplication
-	FixedPoint &operator *= (const FixedPoint &rhs)
+	ComplexFixedPoint &operator *= (const ComplexFixedPoint &rhs)
 	{
 		setWidth(m_width + rhs.m_width + 1);
 		std::complex<int64_t>::operator*=(rhs);
@@ -85,25 +85,25 @@ public:
 		return *this;
 	}
 
-	friend FixedPoint operator * (FixedPoint lhs, const FixedPoint &rhs)
+	friend ComplexFixedPoint operator * (ComplexFixedPoint lhs, const ComplexFixedPoint &rhs)
 	{
 		return lhs *= rhs;
 	}
 	
 
-	FixedPoint &truncateBy(unsigned int numLsbsToRemove)
+	ComplexFixedPoint &truncateBy(unsigned int numLsbsToRemove)
 	{
 		assert(numLsbsToRemove < m_width);
 		setWidth(m_width - numLsbsToRemove);
 		return (*this) >> numLsbsToRemove;
 	}
 
-	FixedPoint &truncateTo(unsigned int newWidth)
+	ComplexFixedPoint &truncateTo(unsigned int newWidth)
 	{
 		return truncateBy(m_width - newWidth);
 	}
 
-	FixedPoint &saturateTo(unsigned int newWidth)
+	ComplexFixedPoint &saturateTo(unsigned int newWidth)
 	{
 		assert(newWidth > 0);
 		assert(newWidth <= m_width);
@@ -130,12 +130,12 @@ public:
 		return *this;
 	}
 
-	FixedPoint &saturateBy(unsigned int numMsbsToRemove)
+	ComplexFixedPoint &saturateBy(unsigned int numMsbsToRemove)
 	{
 		return saturateTo(m_width - numMsbsToRemove);
 	}
 
-	FixedPoint &roundBy(unsigned int numLsbsToRemove)
+	ComplexFixedPoint &roundBy(unsigned int numLsbsToRemove)
 	{
 		assert(numLsbsToRemove < m_width);
 
@@ -150,12 +150,12 @@ public:
 		return *this;
 	}
 
-	FixedPoint &roundTo(unsigned int newWidth)
+	ComplexFixedPoint &roundTo(unsigned int newWidth)
 	{
 		return roundBy(m_width - newWidth);
 	}
 
-	FixedPoint &signExtendBy(unsigned int numMsbsToAdd)
+	ComplexFixedPoint &signExtendBy(unsigned int numMsbsToAdd)
 	{
 		assert(numMsbsToAdd >= 0);
 		assert(numMsbsToAdd + m_width <= MAX_WIDTH);
@@ -163,7 +163,7 @@ public:
 		return *this;
 	}
 
-	FixedPoint &signExtendTo(unsigned int newWidth)
+	ComplexFixedPoint &signExtendTo(unsigned int newWidth)
 	{
 		return signExtendBy(newWidth - m_width);
 	}
