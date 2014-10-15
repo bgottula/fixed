@@ -1,7 +1,11 @@
+#ifndef COMPLEX_FIXED_POINT_H
+#define COMPLEX_FIXED_POINT_H
+
 #include <complex>
 #include <cstdint>
 #include <cassert>
 #include <algorithm>
+#include "FixedPoint.h"
 
 
 /* TODO: Perhaps throw exceptions in addition to or in place of
@@ -33,9 +37,9 @@ public:
 
 	static const int MAX_WIDTH = 64;
 
-	int getWidth(void) { return m_width; }
-	int64_t getMinVal(void) { return m_minVal; }
-	int64_t getMaxVal(void) { return m_maxVal; }
+	int width(void) const { return m_width; }
+	int64_t minVal(void) const { return m_minVal; }
+	int64_t maxVal(void) const { return m_maxVal; }
 
 
 	ComplexFixedPoint &operator = (const ComplexFixedPoint &rhs)
@@ -75,6 +79,22 @@ public:
 	{
 		return lhs += rhs;
 	}
+
+
+	// scalar multiplication
+	ComplexFixedPoint &operator *= (const FixedPoint &rhs)
+	{
+		setWidth(m_width + rhs.width());
+		std::complex<int64_t>::operator*=(rhs.val());
+		checkSize();
+		return *this;
+	}
+
+	friend ComplexFixedPoint operator * (ComplexFixedPoint lhs, const FixedPoint &rhs)
+	{
+		return lhs *= rhs;
+	}
+
 
 	// complex multiplication
 	ComplexFixedPoint &operator *= (const ComplexFixedPoint &rhs)
@@ -195,3 +215,5 @@ private:
 		assert(imag() <= m_maxVal);
 	}
 };
+
+#endif
