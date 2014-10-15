@@ -48,15 +48,15 @@ public:
 
 	FixedPoint &operator >> (const int nbits)
 	{
-		this->_Val[_RE] >>= nbits;
-		this->_Val[_IM] >>= nbits;
+		real(real() >> nbits);
+		imag(imag() >> nbits);
 		return (*this);
 	}
 
 	FixedPoint &operator << (const int nbits)
 	{
-		this->_Val[_RE] <<= nbits;
-		this->_Val[_IM] <<= nbits;
+		real(real() << nbits);
+		imag(imag() << nbits);
 		return (*this);
 	}
 
@@ -73,7 +73,7 @@ public:
 	}
 
 
-	friend FixedPoint operator+(const FixedPoint &lhs, const FixedPoint &rhs)
+	friend FixedPoint operator+(FixedPoint lhs, const FixedPoint &rhs)
 	{
 		return lhs += rhs;
 	}
@@ -83,9 +83,7 @@ public:
 	{
 		assert(numLsbsToRemove < m_width);
 		setWidth(m_width - numLsbsToRemove);
-		this->_Val[_RE] >>= numLsbsToRemove;
-		this->_Val[_IM] >>= numLsbsToRemove;
-		return *this;
+		return (*this) >> numLsbsToRemove;
 	}
 
 	FixedPoint &truncateTo(unsigned int newWidth)
@@ -99,22 +97,22 @@ public:
 		assert(newWidth <= m_width);
 		setWidth(newWidth);
 		
-		if (this->_Val[_RE] > m_maxVal)
+		if (real() > m_maxVal)
 		{
-			this->_Val[_RE] = m_maxVal;
+			real(m_maxVal);
 		}
-		else if (this->_Val[_RE] < m_minVal)
+		else if (real() < m_minVal)
 		{
-			this->_Val[_RE] = m_minVal;
+			real(m_minVal);
 		}
 
-		if (this->_Val[_IM] > m_maxVal)
+		if (imag() > m_maxVal)
 		{
-			this->_Val[_IM] = m_maxVal;
+			imag(m_maxVal);
 		}
-		else if (this->_Val[_IM] < m_minVal)
+		else if (imag() < m_minVal)
 		{
-			this->_Val[_IM] = m_minVal;
+			imag(m_minVal);
 		}
 
 		return *this;
@@ -129,13 +127,11 @@ public:
 	{
 		assert(numLsbsToRemove < m_width);
 
-		int roundUp = (this->_Val[_RE] >> (numLsbsToRemove - 1)) & 0x1;
-		this->_Val[_RE] >>= numLsbsToRemove;
-		this->_Val[_RE] += roundUp;
+		int roundUp = (real() >> (numLsbsToRemove - 1)) & 0x1;
+		real((real() >> numLsbsToRemove) + roundUp);
 
-		roundUp = (this->_Val[_IM] >> (numLsbsToRemove - 1)) & 0x1;
-		this->_Val[_IM] >>= numLsbsToRemove;
-		this->_Val[_IM] += roundUp;
+		roundUp = (imag() >> (numLsbsToRemove - 1)) & 0x1;
+		imag((imag() >> numLsbsToRemove) + roundUp);
 
 		setWidth(m_width - numLsbsToRemove);
 
