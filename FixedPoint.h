@@ -177,9 +177,9 @@ private:
 	// throw exceptions?
 	void checkSize(void)
 	{
-		assert(this->real() >= m_minVal);
-		assert(this->real() <= m_maxVal);
-		assert(this->imag() >= m_minVal);
-		assert(this->imag() <= m_maxVal);
+		assert(real() >= m_minVal);
+		assert(real() <= m_maxVal);
+		assert(imag() >= m_minVal);
+		assert(imag() <= m_maxVal);
 	}
 };
