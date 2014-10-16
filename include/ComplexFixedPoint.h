@@ -177,7 +177,6 @@ public:
 
 	ComplexFixedPoint &signExtendBy(unsigned int numMsbsToAdd)
 	{
-		assert(numMsbsToAdd >= 0);
 		assert(numMsbsToAdd + m_width <= MAX_WIDTH);
 		setWidth(m_width + numMsbsToAdd);
 		return *this;

@@ -44,13 +44,13 @@ public:
 
 	FixedPoint &operator >> (const int nbits)
 	{
-		m_val >> nbits;
+		m_val >>= nbits;
 		return *this;
 	}
 
 	FixedPoint &operator << (const int nbits)
 	{
-		m_val << nbits;
+		m_val <<= nbits;
 		return *this;
 	}
 
@@ -140,7 +140,6 @@ public:
 
 	FixedPoint &signExtendBy(unsigned int numMsbsToAdd)
 	{
-		assert(numMsbsToAdd >= 0);
 		assert(numMsbsToAdd + m_width <= MAX_WIDTH);
 		setWidth(m_width + numMsbsToAdd);
 		return *this;
