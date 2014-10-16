@@ -29,13 +29,18 @@ class ComplexFixedPoint : public std::complex<std::int64_t>
 public:
 
 	ComplexFixedPoint(void)
+		: m_widthMutable(true)
 	{
-		ComplexFixedPoint(std::complex<int64_t>(0, 0), DEFAULT_WIDTH, true);
+		setWidth(8);
+		checkSize();
 	}
 
 	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width, bool widthMutable = false)
+		: std::complex<int64_t>(r, i),
+		m_widthMutable(widthMutable)
 	{
-		ComplexFixedPoint(std::complex<int64_t>(r, i), width, widthMutable);
+		setWidth(width);
+		checkSize();
 	}
 
 	ComplexFixedPoint(std::complex<int64_t> &c, unsigned int width, bool widthMutable = false)
