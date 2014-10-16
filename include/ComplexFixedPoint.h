@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <cassert>
 #include <algorithm>
+#include <stdexcept>
 #include "FixedPoint.h"
 
 
@@ -17,18 +18,27 @@
  * add methods to convert to floating-point types.
  */
 
+class SizeMismatchException : public std::runtime_error
+{
+public: SizeMismatchException(void) :
+	std::runtime_error("Size of lhs and rhs of assignment must match") {};
+};
+
 class ComplexFixedPoint : public std::complex<std::int64_t>
 {
 public:
 
-	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width)
-		: std::complex<int64_t>(r, i)
+	ComplexFixedPoint(void)
 	{
-		setWidth(width);
-		checkSize();	
+		ComplexFixedPoint(std::complex<int64_t>(0, 0), DEFAULT_WIDTH, true);
 	}
 
-	ComplexFixedPoint(std::complex<int64_t> &c, unsigned int width)
+	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width, bool widthMutable = false)
+	{
+		ComplexFixedPoint(std::complex<int64_t>(r, i), width, widthMutable);
+	}
+
+	ComplexFixedPoint(std::complex<int64_t> &c, unsigned int width, bool widthMutable = false)
 		: std::complex<int64_t>(c)
 	{
 		setWidth(width);
@@ -36,6 +46,7 @@ public:
 	}
 
 	static const int MAX_WIDTH = 64;
+	static const int DEFAULT_WIDTH = 8;
 
 	int width(void) const { return m_width; }
 	int64_t minVal(void) const { return m_minVal; }
@@ -44,9 +55,21 @@ public:
 
 	ComplexFixedPoint &operator = (const ComplexFixedPoint &rhs)
 	{
-		assert(rhs.m_width == m_width);
+		/* Only allow width copy on assignment when default constructor was used */
+		if (m_widthMutable)
+		{
+			setWidth(rhs.m_width);
+		}
+		else
+		{
+			if (rhs.m_width != m_width)
+			{
+				throw SizeMismatchException();
+			}
+		}
 		std::complex<int64_t>::operator=(rhs);
-		return (*this);
+		checkSize();
+		return *this;
 	}
 
 
@@ -191,6 +214,7 @@ public:
 
 private:
 
+	bool m_widthMutable;
 	unsigned int m_width;
 	std::int64_t m_maxVal;
 	std::int64_t m_minVal;
