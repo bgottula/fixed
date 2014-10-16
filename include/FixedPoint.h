@@ -178,4 +178,6 @@ private:
 	}
 };
 
+typedef FixedPoint Fxp;
+
 #endif

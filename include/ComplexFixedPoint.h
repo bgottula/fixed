@@ -215,4 +215,6 @@ private:
 	}
 };
 
+typedef ComplexFixedPoint CFxp;
+
 #endif
