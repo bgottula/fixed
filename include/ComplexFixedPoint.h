@@ -79,6 +79,19 @@ public:
 	}
 
 
+	bool operator == (const ComplexFixedPoint &rhs)
+	{
+		return real() == rhs.real() 
+			&& imag() == rhs.imag() 
+			&& m_width == rhs.m_width;
+	}
+
+	bool operator != (const ComplexFixedPoint &rhs)
+	{
+		return !((*this) == rhs);
+	}
+
+
 	ComplexFixedPoint &operator >> (const int nbits)
 	{
 		real(real() >> nbits);
@@ -122,6 +135,11 @@ public:
 	friend ComplexFixedPoint operator * (ComplexFixedPoint lhs, const FixedPoint &rhs)
 	{
 		return lhs *= rhs;
+	}
+
+	friend ComplexFixedPoint operator * (const FixedPoint &lhs, ComplexFixedPoint rhs)
+	{
+		return rhs *= lhs;
 	}
 
 
