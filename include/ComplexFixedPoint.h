@@ -44,7 +44,8 @@ public:
 	}
 
 	ComplexFixedPoint(std::complex<int64_t> &c, unsigned int width, bool widthMutable = false)
-		: std::complex<int64_t>(c)
+		: std::complex<int64_t>(c),
+		m_widthMutable(widthMutable)
 	{
 		setWidth(width);
 		checkSize();
@@ -53,7 +54,7 @@ public:
 	static const int MAX_WIDTH = 64;
 	static const int DEFAULT_WIDTH = 8;
 
-	int width(void) const { return m_width; }
+	unsigned int width(void) const { return m_width; }
 	int64_t minVal(void) const { return m_minVal; }
 	int64_t maxVal(void) const { return m_maxVal; }
 
