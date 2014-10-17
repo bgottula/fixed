@@ -83,6 +83,22 @@ BOOST_AUTO_TEST_CASE( CFxpScalarMultiplication )
 }
 
 
+BOOST_AUTO_TEST_CASE( CFxpMultiplication )
+{
+	CFxp a(1, 2, 8);
+	CFxp b(2, 5, 5);
+
+	/* complex multiplication is commutative */
+	BOOST_CHECK_EQUAL(a * b, b * a);
+
+	/* width after multiplication */
+	BOOST_CHECK_EQUAL((a * b).width(), 14);
+
+	/* result check */
+	BOOST_CHECK_EQUAL(a * b, CFxp(-8, 9, 14));
+}
+
+
 BOOST_AUTO_TEST_CASE( CFxpAddition )
 {
 	CFxp a(1, 2, 8);
