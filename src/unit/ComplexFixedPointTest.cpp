@@ -9,9 +9,11 @@ BOOST_AUTO_TEST_CASE( CFxpAccessors )
 {
 	CFxp a(1, 2, 8);
 
+	BOOST_CHECK_EQUAL(a.real(), 1);
+	BOOST_CHECK_EQUAL(a.imag(), 2);
 	BOOST_CHECK_EQUAL(a.width(), 8);
-
-
+	BOOST_CHECK_EQUAL(a.minVal(), -128);
+	BOOST_CHECK_EQUAL(a.maxVal(), 127);
 }
 
 
