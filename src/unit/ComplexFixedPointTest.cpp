@@ -81,3 +81,19 @@ BOOST_AUTO_TEST_CASE( CFxpScalarMultiplication )
 	/* result check */
 	BOOST_CHECK_EQUAL(a * b, CFxp(2, 4, 13));
 }
+
+
+BOOST_AUTO_TEST_CASE( CFxpAddition )
+{
+	CFxp a(1, 2, 8);
+	CFxp b(2, 5, 5);
+
+	/* addition is commutative */
+	BOOST_CHECK_EQUAL(a + b, b + a);
+
+	/* width after addition */
+	BOOST_CHECK_EQUAL((a + b).width(), 9);
+
+	/* result check */
+	BOOST_CHECK_EQUAL(a + b, CFxp(3, 7, 9));
+}
