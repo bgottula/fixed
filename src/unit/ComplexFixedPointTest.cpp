@@ -15,6 +15,23 @@ BOOST_AUTO_TEST_CASE( CFxpAccessors )
 }
 
 
+BOOST_AUTO_TEST_CASE( CFxpAssignment )
+{
+	CFxp a(1, 2, 8);
+	CFxp b(1, 2, 10);
+	CFxp c;
+	CFxp d(1, 2, 8, true);
+	CFxp e(1, 2, 8, false);
+
+	BOOST_CHECK_THROW(a = b, SizeMismatchException);
+	BOOST_CHECK_NO_THROW(c = a);
+	BOOST_CHECK_EQUAL(c, a);
+	BOOST_CHECK_NO_THROW(d = b);
+	BOOST_CHECK_EQUAL(d, b);
+	BOOST_CHECK_THROW(e = b, SizeMismatchException);
+}
+
+
 BOOST_AUTO_TEST_CASE( CFxpEquality )
 {
 	CFxp a(1, 2, 8);
