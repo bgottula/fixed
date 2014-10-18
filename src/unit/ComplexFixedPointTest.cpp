@@ -91,6 +91,9 @@ BOOST_AUTO_TEST_CASE( CFxpMultiplication )
 	/* complex multiplication is commutative */
 	BOOST_CHECK_EQUAL(a * b, b * a);
 
+	/* chaining works */
+	BOOST_CHECK_EQUAL(a * a * a, a * a * a);
+
 	/* width after multiplication */
 	BOOST_CHECK_EQUAL((a * b).width(), 14);
 
@@ -106,6 +109,9 @@ BOOST_AUTO_TEST_CASE( CFxpAddition )
 
 	/* addition is commutative */
 	BOOST_CHECK_EQUAL(a + b, b + a);
+
+	/* chaining works */
+	BOOST_CHECK_EQUAL(a + a + a, a + a + a);
 
 	/* width after addition */
 	BOOST_CHECK_EQUAL((a + b).width(), 9);
