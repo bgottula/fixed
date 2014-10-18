@@ -5,6 +5,17 @@
 using namespace std;
 
 
+BOOST_AUTO_TEST_CASE( CFxpConstructors )
+{
+	/* Values too large for width */
+	BOOST_CHECK_THROW(CFxp(128, 0, 8), range_error);
+	BOOST_CHECK_THROW(CFxp(0, -129, 8), range_error);
+
+	/* Width larger than max allowed width */
+	BOOST_CHECK_THROW(CFxp(0, 0, CFxp::MAX_WIDTH + 1), range_error);
+}
+
+
 BOOST_AUTO_TEST_CASE( CFxpAccessors )
 {
 	CFxp a(1, 2, 8);

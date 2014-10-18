@@ -29,15 +29,15 @@ class ComplexFixedPoint : public std::complex<std::int64_t>
 public:
 
 	ComplexFixedPoint(void)
-		: m_widthMutable(true)
+		: m_widthMutableOnAssign(true)
 	{
-		setWidth(8);
+		setWidth(DEFAULT_WIDTH);
 		checkSize();
 	}
 
 	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width, bool widthMutable = false)
 		: std::complex<int64_t>(r, i),
-		m_widthMutable(widthMutable)
+		m_widthMutableOnAssign(widthMutable)
 	{
 		setWidth(width);
 		checkSize();
@@ -45,7 +45,7 @@ public:
 
 	ComplexFixedPoint(std::complex<int64_t> &c, unsigned int width, bool widthMutable = false)
 		: std::complex<int64_t>(c),
-		m_widthMutable(widthMutable)
+		m_widthMutableOnAssign(widthMutable)
 	{
 		setWidth(width);
 		checkSize();
@@ -62,7 +62,7 @@ public:
 	ComplexFixedPoint &operator = (const ComplexFixedPoint &rhs)
 	{
 		/* Only allow width copy on assignment when default constructor was used */
-		if (m_widthMutable)
+		if (m_widthMutableOnAssign)
 		{
 			setWidth(rhs.m_width);
 		}
@@ -238,7 +238,7 @@ public:
 
 private:
 
-	bool m_widthMutable;
+	bool m_widthMutableOnAssign;
 	unsigned int m_width;
 	std::int64_t m_maxVal;
 	std::int64_t m_minVal;
@@ -246,20 +246,22 @@ private:
 
 	void setWidth(unsigned int width)
 	{
-		assert(width > 0);
-		assert(width <= MAX_WIDTH);
+		if (width > MAX_WIDTH)
+		{
+			throw std::range_error("Width outside allowed range");
+		}
 		m_width = width;
 		m_minVal = -(1LL << (width - 1));
 		m_maxVal = (1LL << (width - 1)) - 1;
 	}
 
-	// throw exceptions?
 	void checkSize(void)
 	{
-		assert(real() >= m_minVal);
-		assert(real() <= m_maxVal);
-		assert(imag() >= m_minVal);
-		assert(imag() <= m_maxVal);
+		if ((real() < m_minVal) || (real() > m_maxVal) || (imag() < m_minVal)
+			|| (imag() > m_maxVal))
+		{
+			throw std::range_error("Values exceed size");
+		}
 	}
 };
 
