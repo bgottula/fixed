@@ -9,10 +9,6 @@
 #include "FixedPoint.h"
 
 
-/* TODO: Perhaps throw exceptions in addition to or in place of
- * assertions.
- */
-
 /* TODO: Add support for a binary point. This would necessitate
  * overloading various operations to adjust it. Could also
  * add methods to convert to floating-point types.
@@ -43,7 +39,7 @@ public:
 		checkSize();
 	}
 
-	ComplexFixedPoint(std::complex<int64_t> &c, unsigned int width, bool widthMutable = false)
+	ComplexFixedPoint(std::complex<int64_t> c, unsigned int width, bool widthMutable = false)
 		: std::complex<int64_t>(c),
 		m_widthMutableOnAssign(widthMutable)
 	{
@@ -66,12 +62,9 @@ public:
 		{
 			setWidth(rhs.m_width);
 		}
-		else
+		else if (rhs.m_width != m_width)
 		{
-			if (rhs.m_width != m_width)
-			{
-				throw SizeMismatchException();
-			}
+			throw SizeMismatchException();
 		}
 		std::complex<int64_t>::operator=(rhs);
 		checkSize();
