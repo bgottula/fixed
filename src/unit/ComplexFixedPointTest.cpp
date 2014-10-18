@@ -53,11 +53,18 @@ BOOST_AUTO_TEST_CASE( CFxpAssignment )
 	CFxp d(1, 2, 8, true);
 	CFxp e(1, 2, 8, false);
 
+	/* lhs and rhs widths must match by default */
 	BOOST_CHECK_THROW(a = b, SizeMismatchException);
-	BOOST_CHECK_NO_THROW(c = a);
+
+	/* Default constructor allows mutable width on assignment */
+	BOOST_CHECK_NO_THROW(c = b);
 	BOOST_CHECK_EQUAL(c, a);
+
+	/* Explicitly set mutable width on assignment to true in d constructor */
 	BOOST_CHECK_NO_THROW(d = b);
 	BOOST_CHECK_EQUAL(d, b);
+
+	/* Explicitly set mutable width on assignment to false in e constructor */
 	BOOST_CHECK_THROW(e = b, SizeMismatchException);
 }
 
