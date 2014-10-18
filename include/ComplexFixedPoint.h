@@ -3,8 +3,6 @@
 
 #include <complex>
 #include <cstdint>
-#include <cassert>
-#include <algorithm>
 #include <stdexcept>
 #include "FixedPoint.h"
 
@@ -153,7 +151,11 @@ public:
 
 	ComplexFixedPoint &truncateBy(unsigned int numLsbsToRemove)
 	{
-		assert(numLsbsToRemove < m_width);
+		if (numLsbsToRemove >= m_width)
+		{
+			throw std::range_error("Truncation width out of range");
+		}
+
 		setWidth(m_width - numLsbsToRemove);
 		return (*this) >> numLsbsToRemove;
 	}
@@ -165,8 +167,11 @@ public:
 
 	ComplexFixedPoint &saturateTo(unsigned int newWidth)
 	{
-		assert(newWidth > 0);
-		assert(newWidth <= m_width);
+		if ((newWidth <= 0) || (newWidth > m_width))
+		{
+			throw std::range_error("Saturation width out of range");
+		}
+
 		setWidth(newWidth);
 		
 		if (real() > m_maxVal)
@@ -197,7 +202,10 @@ public:
 
 	ComplexFixedPoint &roundBy(unsigned int numLsbsToRemove)
 	{
-		assert(numLsbsToRemove < m_width);
+		if (numLsbsToRemove >= m_width)
+		{
+			throw std::range_error("Round width out of range");
+		}
 
 		int roundUp = (real() >> (numLsbsToRemove - 1)) & 0x1;
 		real((real() >> numLsbsToRemove) + roundUp);
@@ -217,7 +225,11 @@ public:
 
 	ComplexFixedPoint &signExtendBy(unsigned int numMsbsToAdd)
 	{
-		assert(numMsbsToAdd + m_width <= MAX_WIDTH);
+		if (numMsbsToAdd + m_width > MAX_WIDTH)
+		{
+			throw std::range_error("Sign extend width out of range");
+		}
+
 		setWidth(m_width + numMsbsToAdd);
 		return *this;
 	}
