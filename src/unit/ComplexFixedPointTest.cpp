@@ -7,6 +7,23 @@ using namespace std;
 
 BOOST_AUTO_TEST_CASE( CFxpConstructors )
 {
+	/* Check default constructor */
+	CFxp a;
+	const unsigned int D_WIDTH = CFxp::DEFAULT_WIDTH;
+	BOOST_CHECK_EQUAL(a.width(), D_WIDTH);
+	BOOST_CHECK_EQUAL(a.real(), 0);
+	BOOST_CHECK_EQUAL(a.imag(), 0);
+
+	/* Check non-default constructors */
+	CFxp b(1, -3, 4);
+	BOOST_CHECK_EQUAL(b.width(), 4);
+	BOOST_CHECK_EQUAL(b.real(), 1);
+	BOOST_CHECK_EQUAL(b.imag(), -3);
+	CFxp c(complex<int64_t>(5, -13), 6);
+	BOOST_CHECK_EQUAL(c.width(), 6);
+	BOOST_CHECK_EQUAL(c.real(), 5);
+	BOOST_CHECK_EQUAL(c.imag(), -13);
+
 	/* Values too large for width */
 	BOOST_CHECK_THROW(CFxp(128, 0, 8), range_error);
 	BOOST_CHECK_THROW(CFxp(0, -129, 8), range_error);
