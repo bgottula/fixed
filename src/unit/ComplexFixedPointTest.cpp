@@ -154,3 +154,21 @@ BOOST_AUTO_TEST_CASE( CFxpAddition )
 	/* result check */
 	BOOST_CHECK_EQUAL(a + b, CFxp(3, 7, 9));
 }
+
+
+BOOST_AUTO_TEST_CASE( CFxpTruncation )
+{
+	CFxp a(15, -32, 10);
+
+	BOOST_CHECK_EQUAL(a.truncateBy(2), CFxp(3, -8, 8));
+	BOOST_CHECK_EQUAL(a.truncateTo(7), CFxp(1, -4, 7));
+}
+
+
+BOOST_AUTO_TEST_CASE( CFxpRounding )
+{
+	CFxp a(15, -32, 10);
+
+	BOOST_CHECK_EQUAL(a.roundBy(2), CFxp(4, -8, 8));
+	BOOST_CHECK_EQUAL(a.roundTo(7), CFxp(2, -4, 7));
+}
