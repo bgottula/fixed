@@ -22,31 +22,21 @@ class ComplexFixedPoint : public std::complex<std::int64_t>
 {
 public:
 
-	ComplexFixedPoint(void)
-		: m_widthMutableOnAssign(true)
-	{
-		setWidth(DEFAULT_WIDTH);
-		checkSize();
-	}
-
-	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width, bool widthMutable = false)
-		: std::complex<int64_t>(r, i),
-		m_widthMutableOnAssign(widthMutable)
+	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width)
+		: std::complex<int64_t>(r, i)
 	{
 		setWidth(width);
 		checkSize();
 	}
 
-	ComplexFixedPoint(std::complex<int64_t> c, unsigned int width, bool widthMutable = false)
-		: std::complex<int64_t>(c),
-		m_widthMutableOnAssign(widthMutable)
+	ComplexFixedPoint(std::complex<int64_t> c, unsigned int width)
+		: std::complex<int64_t>(c)
 	{
 		setWidth(width);
 		checkSize();
 	}
 
 	static const int MAX_WIDTH = 64;
-	static const int DEFAULT_WIDTH = 8;
 
 	unsigned int width(void) const { return m_width; }
 	int64_t minVal(void) const { return m_minVal; }
@@ -55,12 +45,7 @@ public:
 
 	ComplexFixedPoint &operator = (const ComplexFixedPoint &rhs)
 	{
-		/* Only allow width copy on assignment when default constructor was used */
-		if (m_widthMutableOnAssign)
-		{
-			setWidth(rhs.m_width);
-		}
-		else if (rhs.m_width != m_width)
+		if (rhs.m_width != m_width)
 		{
 			throw SizeMismatchException();
 		}
@@ -243,7 +228,6 @@ public:
 
 private:
 
-	bool m_widthMutableOnAssign;
 	unsigned int m_width;
 	std::int64_t m_maxVal;
 	std::int64_t m_minVal;

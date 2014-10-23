@@ -7,14 +7,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_CASE( CFxpConstructors )
 {
-	/* Check default constructor */
-	CFxp a;
-	const unsigned int D_WIDTH = CFxp::DEFAULT_WIDTH;
-	BOOST_CHECK_EQUAL(a.width(), D_WIDTH);
-	BOOST_CHECK_EQUAL(a.real(), 0);
-	BOOST_CHECK_EQUAL(a.imag(), 0);
-
-	/* Check non-default constructors */
+	/* Check constructors */
 	CFxp b(1, -3, 4);
 	BOOST_CHECK_EQUAL(b.width(), 4);
 	BOOST_CHECK_EQUAL(b.real(), 1);
@@ -49,23 +42,14 @@ BOOST_AUTO_TEST_CASE( CFxpAssignment )
 {
 	CFxp a(1, 2, 8);
 	CFxp b(1, 2, 10);
-	CFxp c;
-	CFxp d(1, 2, 8, true);
-	CFxp e(1, 2, 8, false);
+	CFxp c(0, 0, 8);
 
 	/* lhs and rhs widths must match by default */
 	BOOST_CHECK_THROW(a = b, SizeMismatchException);
 
-	/* Default constructor allows mutable width on assignment */
-	BOOST_CHECK_NO_THROW(c = b);
+	/* Valid assignment */
+	BOOST_CHECK_NO_THROW(c = a);
 	BOOST_CHECK_EQUAL(c, a);
-
-	/* Explicitly set mutable width on assignment to true in d constructor */
-	BOOST_CHECK_NO_THROW(d = b);
-	BOOST_CHECK_EQUAL(d, b);
-
-	/* Explicitly set mutable width on assignment to false in e constructor */
-	BOOST_CHECK_THROW(e = b, SizeMismatchException);
 }
 
 
