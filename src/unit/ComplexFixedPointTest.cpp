@@ -197,3 +197,11 @@ BOOST_AUTO_TEST_CASE( CFxpSignExtension )
 	BOOST_CHECK_THROW(a.signExtendTo(CFxp::MAX_WIDTH + 1), std::range_error);
 	BOOST_CHECK_THROW(a.signExtendBy(CFxp::MAX_WIDTH - a.width() + 1), std::range_error);
 }
+
+BOOST_AUTO_TEST_CASE( CFxpToFloat )
+{
+	CFxp a(15, -32, 10, 1);
+
+	BOOST_CHECK_CLOSE(a.toFloat().real(), 15.0/2.0, 0.001);
+	BOOST_CHECK_CLOSE(a.toFloat().imag(), -32.0/2.0, 0.001);
+}
