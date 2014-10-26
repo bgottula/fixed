@@ -42,7 +42,6 @@ public:
 	int64_t minVal(void) const { return m_minVal; }
 	int64_t maxVal(void) const { return m_maxVal; }
 
-
 	ComplexFixedPoint &operator = (const ComplexFixedPoint &rhs)
 	{
 		if (rhs.m_width != m_width)
@@ -53,7 +52,6 @@ public:
 		checkSize();
 		return *this;
 	}
-
 
 	bool operator == (const ComplexFixedPoint &rhs)
 	{
@@ -67,28 +65,11 @@ public:
 		return !((*this) == rhs);
 	}
 
-
-	ComplexFixedPoint &operator >> (const int nbits)
-	{
-		real(real() >> nbits);
-		imag(imag() >> nbits);
-		return (*this);
-	}
-
-	ComplexFixedPoint &operator << (const int nbits)
-	{
-		real(real() << nbits);
-		imag(imag() << nbits);
-		return (*this);
-	}
-
-
 	friend ComplexFixedPoint operator+(const ComplexFixedPoint &lhs, const ComplexFixedPoint &rhs)
 	{
 		return ComplexFixedPoint((std::complex<int64_t>)lhs + (std::complex<int64_t>)rhs, 
 			std::max(lhs.m_width, rhs.m_width) + 1);
 	}
-
 
 	friend ComplexFixedPoint operator * (const ComplexFixedPoint &lhs, const FixedPoint &rhs)
 	{
@@ -107,7 +88,6 @@ public:
 		return ComplexFixedPoint((complex<int64_t>)lhs * (complex<int64_t>)rhs,
 			lhs.m_width + rhs.m_width + 1);
 	}
-	
 
 	ComplexFixedPoint &truncateBy(unsigned int numLsbsToRemove)
 	{
@@ -207,6 +187,19 @@ private:
 	std::int64_t m_maxVal;
 	std::int64_t m_minVal;
 
+	ComplexFixedPoint &operator >> (const int nbits)
+	{
+		real(real() >> nbits);
+		imag(imag() >> nbits);
+		return (*this);
+	}
+
+	ComplexFixedPoint &operator << (const int nbits)
+	{
+		real(real() << nbits);
+		imag(imag() << nbits);
+		return (*this);
+	}
 
 	void setWidth(unsigned int width)
 	{
