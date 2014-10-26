@@ -53,11 +53,11 @@ public:
 		return *this;
 	}
 
-	bool operator == (const ComplexFixedPoint &rhs)
+	friend bool operator == (const ComplexFixedPoint &lhs, const ComplexFixedPoint & rhs)
 	{
-		return real() == rhs.real() 
-			&& imag() == rhs.imag() 
-			&& m_width == rhs.m_width;
+		return lhs.real() == rhs.real() 
+			&& lhs.imag() == rhs.imag() 
+			&& lhs.m_width == rhs.m_width;
 	}
 
 	bool operator != (const ComplexFixedPoint &rhs)
