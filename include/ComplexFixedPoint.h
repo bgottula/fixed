@@ -82,55 +82,30 @@ public:
 		return (*this);
 	}
 
-	
-	// add ComplexFixedPoint to this
-	ComplexFixedPoint &operator += (const ComplexFixedPoint &rhs)
+
+	friend ComplexFixedPoint operator+(const ComplexFixedPoint &lhs, const ComplexFixedPoint &rhs)
 	{
-		setWidth(std::max(m_width, rhs.m_width) + 1);
-		std::complex<int64_t>::operator+=(rhs);
-		checkSize();
-		return *this;
+		return ComplexFixedPoint((std::complex<int64_t>)lhs + (std::complex<int64_t>)rhs, 
+			std::max(lhs.m_width, rhs.m_width) + 1);
 	}
 
 
-	friend ComplexFixedPoint operator+(ComplexFixedPoint lhs, const ComplexFixedPoint &rhs)
+	friend ComplexFixedPoint operator * (const ComplexFixedPoint &lhs, const FixedPoint &rhs)
 	{
-		return lhs += rhs;
+		return ComplexFixedPoint((complex<int64_t>)lhs * rhs.val(), 
+			lhs.width() + rhs.width());
 	}
 
-
-	// scalar multiplication
-	ComplexFixedPoint &operator *= (const FixedPoint &rhs)
+	friend ComplexFixedPoint operator * (const FixedPoint &lhs, const ComplexFixedPoint &rhs)
 	{
-		setWidth(m_width + rhs.width());
-		std::complex<int64_t>::operator*=(rhs.val());
-		checkSize();
-		return *this;
-	}
-
-	friend ComplexFixedPoint operator * (ComplexFixedPoint lhs, const FixedPoint &rhs)
-	{
-		return lhs *= rhs;
-	}
-
-	friend ComplexFixedPoint operator * (const FixedPoint &lhs, ComplexFixedPoint rhs)
-	{
-		return rhs *= lhs;
-	}
-
-
-	// complex multiplication
-	ComplexFixedPoint &operator *= (const ComplexFixedPoint &rhs)
-	{
-		setWidth(m_width + rhs.m_width + 1);
-		std::complex<int64_t>::operator*=(rhs);
-		checkSize();
-		return *this;
+		return ComplexFixedPoint((complex<int64_t>)rhs * lhs.val(), 
+			lhs.width() + rhs.width());
 	}
 
 	friend ComplexFixedPoint operator * (ComplexFixedPoint lhs, const ComplexFixedPoint &rhs)
 	{
-		return lhs *= rhs;
+		return ComplexFixedPoint((complex<int64_t>)lhs * (complex<int64_t>)rhs,
+			lhs.m_width + rhs.m_width + 1);
 	}
 	
 
