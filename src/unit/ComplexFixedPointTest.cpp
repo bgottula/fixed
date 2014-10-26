@@ -144,8 +144,13 @@ BOOST_AUTO_TEST_CASE( CFxpTruncation )
 {
 	CFxp a(15, -32, 10);
 
+	/* Check results for normal use */
 	BOOST_CHECK_EQUAL(a.truncateBy(2), CFxp(3, -8, 8));
 	BOOST_CHECK_EQUAL(a.truncateTo(7), CFxp(1, -4, 7));
+
+	/* Go beyond allowed range */
+	BOOST_CHECK_THROW(a.truncateTo(0), std::range_error);
+	BOOST_CHECK_THROW(a.truncateBy(a.width()), std::range_error);
 }
 
 
@@ -153,6 +158,37 @@ BOOST_AUTO_TEST_CASE( CFxpRounding )
 {
 	CFxp a(15, -32, 10);
 
+	/* Check results for normal use */
 	BOOST_CHECK_EQUAL(a.roundBy(2), CFxp(4, -8, 8));
 	BOOST_CHECK_EQUAL(a.roundTo(7), CFxp(2, -4, 7));
+
+	/* Go beyond allowed range */
+	BOOST_CHECK_THROW(a.roundTo(0), std::range_error);
+	BOOST_CHECK_THROW(a.roundBy(a.width()), std::range_error);
+}
+
+BOOST_AUTO_TEST_CASE( CFxpSaturation )
+{
+	CFxp a(432, -397, 10);
+
+	/* Check results for normal use */
+	BOOST_CHECK_EQUAL(a.saturateBy(2), CFxp(127, -128, 8));
+	BOOST_CHECK_EQUAL(a.saturateTo(6), CFxp(31, -32, 6));
+
+	/* Go beyond allowed range */
+	BOOST_CHECK_THROW(a.saturateTo(0), std::range_error);
+	BOOST_CHECK_THROW(a.saturateBy(a.width()), std::range_error);
+}
+
+BOOST_AUTO_TEST_CASE( CFxpSignExtension )
+{
+	CFxp a(15, -32, 10);
+
+	/* Check results for normal use */
+	BOOST_CHECK_EQUAL(a.signExtendBy(2), CFxp(15, -32, 12));
+	BOOST_CHECK_EQUAL(a.signExtendTo(51), CFxp(15, -32, 51));
+	
+	/* Try to sign extend beyond allowed range */
+	BOOST_CHECK_THROW(a.signExtendTo(CFxp::MAX_WIDTH + 1), std::range_error);
+	BOOST_CHECK_THROW(a.signExtendBy(CFxp::MAX_WIDTH - a.width() + 1), std::range_error);
 }
