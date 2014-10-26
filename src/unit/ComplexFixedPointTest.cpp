@@ -148,11 +148,11 @@ BOOST_AUTO_TEST_CASE( CFxpMultiplication )
 
 BOOST_AUTO_TEST_CASE( CFxpTruncation )
 {
-	CFxp a(15, -32, 10);
+	CFxp a(15, -32, 10, 2);
 
 	/* Check results for normal use */
-	BOOST_CHECK_EQUAL(a.truncateBy(2), CFxp(3, -8, 8));
-	BOOST_CHECK_EQUAL(a.truncateTo(7), CFxp(1, -4, 7));
+	BOOST_CHECK_EQUAL(a.truncateBy(2), CFxp(3, -8, 8, 0));
+	BOOST_CHECK_EQUAL(a.truncateTo(7), CFxp(1, -4, 7, 0));
 
 	/* Go beyond allowed range */
 	BOOST_CHECK_THROW(a.truncateTo(0), std::range_error);
@@ -174,11 +174,11 @@ BOOST_AUTO_TEST_CASE( CFxpSaturation )
 
 BOOST_AUTO_TEST_CASE( CFxpRounding )
 {
-	CFxp a(15, -32, 10);
+	CFxp a(15, -32, 10, 2);
 
 	/* Check results for normal use */
-	BOOST_CHECK_EQUAL(a.roundBy(2), CFxp(4, -8, 8));
-	BOOST_CHECK_EQUAL(a.roundTo(7), CFxp(2, -4, 7));
+	BOOST_CHECK_EQUAL(a.roundBy(2), CFxp(4, -8, 8, 0));
+	BOOST_CHECK_EQUAL(a.roundTo(7), CFxp(2, -4, 7, 0));
 
 	/* Go beyond allowed range */
 	BOOST_CHECK_THROW(a.roundTo(0), std::range_error);

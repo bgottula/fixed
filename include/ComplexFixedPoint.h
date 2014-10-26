@@ -103,6 +103,7 @@ public:
 		}
 
 		setWidth(m_width - numLsbsToRemove);
+		setFractionalBits(std::max((int)m_fracBits - (int)numLsbsToRemove, 0));
 		return (*this) >> numLsbsToRemove;
 	}
 
@@ -160,6 +161,7 @@ public:
 		imag((imag() >> numLsbsToRemove) + roundUp);
 
 		setWidth(m_width - numLsbsToRemove);
+		setFractionalBits(std::max((int)m_fracBits - (int)numLsbsToRemove, 0));
 
 		return *this;
 	}
