@@ -188,7 +188,7 @@ public:
 	std::complex<float> toFloat(void)
 	{
 		std::complex<float> result(real(), imag());
-		return result / (float)(1 << m_fracBits);
+		return result / (float)pow(2.0, m_fracBits);
 	}
 
 private:

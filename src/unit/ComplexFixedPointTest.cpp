@@ -200,8 +200,13 @@ BOOST_AUTO_TEST_CASE( CFxpSignExtension )
 
 BOOST_AUTO_TEST_CASE( CFxpToFloat )
 {
+	/* check a simple case */
 	CFxp a(15, -32, 10, 1);
-
 	BOOST_CHECK_CLOSE(a.toFloat().real(), 15.0/2.0, 0.001);
 	BOOST_CHECK_CLOSE(a.toFloat().imag(), -32.0/2.0, 0.001);
+
+	/* check an extreme case */
+	CFxp b(15, -32, 64, 64);
+	BOOST_CHECK_CLOSE(b.toFloat().real(), 15.0/pow(2.0, 64.0), 0.001);
+	BOOST_CHECK_CLOSE(b.toFloat().imag(), -32.0/pow(2.0, 64.0), 0.001);
 }
