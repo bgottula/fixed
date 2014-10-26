@@ -1,5 +1,6 @@
 #include "boost_test.h"
 #include "ComplexFixedPoint.h"
+#include "FixedPoint.h"
 #include <complex>
 
 using namespace std;
@@ -25,7 +26,6 @@ BOOST_AUTO_TEST_CASE( CFxpConstructors )
 	BOOST_CHECK_THROW(CFxp(0, 0, CFxp::MAX_WIDTH + 1), range_error);
 }
 
-
 BOOST_AUTO_TEST_CASE( CFxpAccessors )
 {
 	CFxp a(1, 2, 8);
@@ -36,7 +36,6 @@ BOOST_AUTO_TEST_CASE( CFxpAccessors )
 	BOOST_CHECK_EQUAL(a.minVal(), -128);
 	BOOST_CHECK_EQUAL(a.maxVal(), 127);
 }
-
 
 BOOST_AUTO_TEST_CASE( CFxpAssignment )
 {
@@ -51,7 +50,6 @@ BOOST_AUTO_TEST_CASE( CFxpAssignment )
 	BOOST_CHECK_NO_THROW(c = a);
 	BOOST_CHECK_EQUAL(c, a);
 }
-
 
 BOOST_AUTO_TEST_CASE( CFxpEquality )
 {
@@ -85,6 +83,23 @@ BOOST_AUTO_TEST_CASE( CFxpEquality )
 	BOOST_CHECK_EQUAL(a != f, true);
 }
 
+BOOST_AUTO_TEST_CASE( CFxpAddition )
+{
+	CFxp a(1, 2, 8);
+	CFxp b(2, 5, 5);
+
+	/* addition is commutative */
+	BOOST_CHECK_EQUAL(a + b, b + a);
+
+	/* chaining works */
+	BOOST_CHECK_EQUAL(a + a + a, a + a + a);
+
+	/* width after addition */
+	BOOST_CHECK_EQUAL((a + b).width(), 9);
+
+	/* result check */
+	BOOST_CHECK_EQUAL(a + b, CFxp(3, 7, 9));
+}
 
 BOOST_AUTO_TEST_CASE( CFxpScalarMultiplication )
 {
@@ -100,7 +115,6 @@ BOOST_AUTO_TEST_CASE( CFxpScalarMultiplication )
 	/* result check */
 	BOOST_CHECK_EQUAL(a * b, CFxp(2, 4, 13));
 }
-
 
 BOOST_AUTO_TEST_CASE( CFxpMultiplication )
 {
@@ -121,25 +135,6 @@ BOOST_AUTO_TEST_CASE( CFxpMultiplication )
 }
 
 
-BOOST_AUTO_TEST_CASE( CFxpAddition )
-{
-	CFxp a(1, 2, 8);
-	CFxp b(2, 5, 5);
-
-	/* addition is commutative */
-	BOOST_CHECK_EQUAL(a + b, b + a);
-
-	/* chaining works */
-	BOOST_CHECK_EQUAL(a + a + a, a + a + a);
-
-	/* width after addition */
-	BOOST_CHECK_EQUAL((a + b).width(), 9);
-
-	/* result check */
-	BOOST_CHECK_EQUAL(a + b, CFxp(3, 7, 9));
-}
-
-
 BOOST_AUTO_TEST_CASE( CFxpTruncation )
 {
 	CFxp a(15, -32, 10);
@@ -153,6 +148,18 @@ BOOST_AUTO_TEST_CASE( CFxpTruncation )
 	BOOST_CHECK_THROW(a.truncateBy(a.width()), std::range_error);
 }
 
+BOOST_AUTO_TEST_CASE( CFxpSaturation )
+{
+	CFxp a(432, -397, 10);
+
+	/* Check results for normal use */
+	BOOST_CHECK_EQUAL(a.saturateBy(2), CFxp(127, -128, 8));
+	BOOST_CHECK_EQUAL(a.saturateTo(6), CFxp(31, -32, 6));
+
+	/* Go beyond allowed range */
+	BOOST_CHECK_THROW(a.saturateTo(0), std::range_error);
+	BOOST_CHECK_THROW(a.saturateBy(a.width()), std::range_error);
+}
 
 BOOST_AUTO_TEST_CASE( CFxpRounding )
 {
@@ -165,19 +172,6 @@ BOOST_AUTO_TEST_CASE( CFxpRounding )
 	/* Go beyond allowed range */
 	BOOST_CHECK_THROW(a.roundTo(0), std::range_error);
 	BOOST_CHECK_THROW(a.roundBy(a.width()), std::range_error);
-}
-
-BOOST_AUTO_TEST_CASE( CFxpSaturation )
-{
-	CFxp a(432, -397, 10);
-
-	/* Check results for normal use */
-	BOOST_CHECK_EQUAL(a.saturateBy(2), CFxp(127, -128, 8));
-	BOOST_CHECK_EQUAL(a.saturateTo(6), CFxp(31, -32, 6));
-
-	/* Go beyond allowed range */
-	BOOST_CHECK_THROW(a.saturateTo(0), std::range_error);
-	BOOST_CHECK_THROW(a.saturateBy(a.width()), std::range_error);
 }
 
 BOOST_AUTO_TEST_CASE( CFxpSignExtension )
