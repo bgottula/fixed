@@ -22,23 +22,28 @@ class ComplexFixedPoint : public std::complex<std::int64_t>
 {
 public:
 
-	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width)
+	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width,
+		unsigned int fractionalBits = 0)
 		: std::complex<int64_t>(r, i)
 	{
 		setWidth(width);
+		setFractionalBits(fractionalBits);
 		checkSize();
 	}
 
-	ComplexFixedPoint(std::complex<int64_t> c, unsigned int width)
+	ComplexFixedPoint(std::complex<int64_t> c, unsigned int width,
+		unsigned int fractionalBits = 0)
 		: std::complex<int64_t>(c)
 	{
 		setWidth(width);
+		setFractionalBits(fractionalBits);
 		checkSize();
 	}
 
 	static const int MAX_WIDTH = 64;
 
 	unsigned int width(void) const { return m_width; }
+	unsigned int fracBits(void) const { return m_fracBits; }
 	int64_t minVal(void) const { return m_minVal; }
 	int64_t maxVal(void) const { return m_maxVal; }
 
@@ -57,7 +62,8 @@ public:
 	{
 		return lhs.real() == rhs.real() 
 			&& lhs.imag() == rhs.imag() 
-			&& lhs.m_width == rhs.m_width;
+			&& lhs.m_width == rhs.m_width
+			&& lhs.m_fracBits == rhs.m_fracBits;
 	}
 
 	bool operator != (const ComplexFixedPoint &rhs)
@@ -184,6 +190,7 @@ public:
 private:
 
 	unsigned int m_width;
+	unsigned int m_fracBits;
 	std::int64_t m_maxVal;
 	std::int64_t m_minVal;
 
@@ -210,6 +217,15 @@ private:
 		m_width = width;
 		m_minVal = -(1LL << (width - 1));
 		m_maxVal = (1LL << (width - 1)) - 1;
+	}
+
+	void setFractionalBits(unsigned int fractionalBits)
+	{
+		if (fractionalBits > m_width)
+		{
+			throw std::range_error("Fractional bits outside allowed range");
+		}
+		m_fracBits = fractionalBits;
 	}
 
 	void checkSize(void)

@@ -9,12 +9,14 @@ using namespace std;
 BOOST_AUTO_TEST_CASE( CFxpConstructors )
 {
 	/* Check constructors */
-	CFxp b(1, -3, 4);
+	CFxp b(1, -3, 4, 1);
 	BOOST_CHECK_EQUAL(b.width(), 4);
+	BOOST_CHECK_EQUAL(b.fracBits(), 1);
 	BOOST_CHECK_EQUAL(b.real(), 1);
 	BOOST_CHECK_EQUAL(b.imag(), -3);
-	CFxp c(complex<int64_t>(5, -13), 6);
+	CFxp c(complex<int64_t>(5, -13), 6, 3);
 	BOOST_CHECK_EQUAL(c.width(), 6);
+	BOOST_CHECK_EQUAL(c.fracBits(), 3);
 	BOOST_CHECK_EQUAL(c.real(), 5);
 	BOOST_CHECK_EQUAL(c.imag(), -13);
 
@@ -24,15 +26,19 @@ BOOST_AUTO_TEST_CASE( CFxpConstructors )
 
 	/* Width larger than max allowed width */
 	BOOST_CHECK_THROW(CFxp(0, 0, CFxp::MAX_WIDTH + 1), range_error);
+
+	/* More fractional bits than total bits */
+	BOOST_CHECK_THROW(CFxp(0, 0, 2, 3), range_error);
 }
 
 BOOST_AUTO_TEST_CASE( CFxpAccessors )
 {
-	CFxp a(1, 2, 8);
+	CFxp a(1, 2, 8, 3);
 
 	BOOST_CHECK_EQUAL(a.real(), 1);
 	BOOST_CHECK_EQUAL(a.imag(), 2);
 	BOOST_CHECK_EQUAL(a.width(), 8);
+	BOOST_CHECK_EQUAL(a.fracBits(), 3);
 	BOOST_CHECK_EQUAL(a.minVal(), -128);
 	BOOST_CHECK_EQUAL(a.maxVal(), 127);
 }
@@ -53,12 +59,13 @@ BOOST_AUTO_TEST_CASE( CFxpAssignment )
 
 BOOST_AUTO_TEST_CASE( CFxpEquality )
 {
-	CFxp a(1, 2, 8);
-	CFxp b(1, 2, 8);
-	CFxp c(1, 2, 10);
-	CFxp d(13, 2, 8);
-	CFxp e(1, 13, 8);
-	CFxp f(24, 38, 21);
+	CFxp a(1, 2, 8, 3);
+	CFxp b(1, 2, 8, 3);
+	CFxp c(1, 2, 10, 3);
+	CFxp d(13, 2, 8, 3);
+	CFxp e(1, 13, 8, 3);
+	CFxp f(1, 2, 8, 1);
+	CFxp g(24, 38, 21, 7);
 
 	/* same object as lhs and rhs */
 	BOOST_CHECK_EQUAL(a == a, true);
@@ -78,9 +85,13 @@ BOOST_AUTO_TEST_CASE( CFxpEquality )
 	BOOST_CHECK_EQUAL(a == e, false);
 	BOOST_CHECK_EQUAL(a != e, true);
 
-	/* everything different */
+	/* same value, same size, different number of fractional bits */
 	BOOST_CHECK_EQUAL(a == f, false);
 	BOOST_CHECK_EQUAL(a != f, true);
+
+	/* everything different */
+	BOOST_CHECK_EQUAL(a == g, false);
+	BOOST_CHECK_EQUAL(a != g, true);
 }
 
 BOOST_AUTO_TEST_CASE( CFxpAddition )
