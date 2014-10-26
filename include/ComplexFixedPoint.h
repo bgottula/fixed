@@ -83,7 +83,7 @@ public:
 			lhs.width() + rhs.width());
 	}
 
-	friend ComplexFixedPoint operator * (ComplexFixedPoint lhs, const ComplexFixedPoint &rhs)
+	friend ComplexFixedPoint operator * (const ComplexFixedPoint &lhs, const ComplexFixedPoint &rhs)
 	{
 		return ComplexFixedPoint((complex<int64_t>)lhs * (complex<int64_t>)rhs,
 			lhs.m_width + rhs.m_width + 1);
