@@ -49,7 +49,7 @@ public:
 
 	ComplexFixedPoint &operator = (const ComplexFixedPoint &rhs)
 	{
-		if (rhs.m_width != m_width)
+		if (rhs.m_width != m_width || rhs.m_fracBits != m_fracBits)
 		{
 			throw SizeMismatchException();
 		}

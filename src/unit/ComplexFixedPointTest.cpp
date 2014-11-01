@@ -48,9 +48,13 @@ BOOST_AUTO_TEST_CASE( CFxpAssignment )
 	CFxp a(1, 2, 8);
 	CFxp b(1, 2, 10);
 	CFxp c(0, 0, 8);
+	CFxp d(1, 2, 8, 3);
 
 	/* lhs and rhs widths must match by default */
 	BOOST_CHECK_THROW(a = b, SizeMismatchException);
+
+	/* lhs and rhs binary point must be in same position */
+	BOOST_CHECK_THROW(a = d, SizeMismatchException);
 
 	/* Valid assignment */
 	BOOST_CHECK_NO_THROW(c = a);
