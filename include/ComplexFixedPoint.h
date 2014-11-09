@@ -73,8 +73,20 @@ public:
 
 	friend ComplexFixedPoint operator+(const ComplexFixedPoint &lhs, const ComplexFixedPoint &rhs)
 	{
-		return ComplexFixedPoint((std::complex<int64_t>)lhs + (std::complex<int64_t>)rhs, 
-			std::max(lhs.m_width, rhs.m_width) + 1);
+		std::complex<int64_t> sum;
+		int fracBitsDifference = rhs.m_fracBits - lhs.m_fracBits;
+		int sumFracBits = std::max(rhs.m_fracBits, lhs.m_fracBits);
+		int sumWidth = std::max(lhs.m_width, rhs.m_width) + 1 + abs(fracBitsDifference);
+		if (fracBitsDifference > 0)
+		{
+			sum = (std::complex<int64_t>)lhs * (1L << fracBitsDifference) + (std::complex<int64_t>)rhs;
+		}
+		else
+		{
+			sum = (std::complex<int64_t>)lhs + (std::complex<int64_t>)rhs * (1L << -fracBitsDifference);
+		}
+
+		return ComplexFixedPoint(sum, sumWidth, sumFracBits);
 	}
 
 	friend ComplexFixedPoint operator * (const ComplexFixedPoint &lhs, const FixedPoint &rhs)

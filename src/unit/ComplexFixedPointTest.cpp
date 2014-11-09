@@ -102,6 +102,7 @@ BOOST_AUTO_TEST_CASE( CFxpAddition )
 {
 	CFxp a(1, 2, 8);
 	CFxp b(2, 5, 5);
+	CFxp c(4, 12, 8, 3);
 
 	/* addition is commutative */
 	BOOST_CHECK_EQUAL(a + b, b + a);
@@ -114,6 +115,16 @@ BOOST_AUTO_TEST_CASE( CFxpAddition )
 
 	/* result check */
 	BOOST_CHECK_EQUAL(a + b, CFxp(3, 7, 9));
+
+	/* different number of fractional bits */
+	CFxp d = a + c;
+	BOOST_CHECK_EQUAL(d.width(), 12);
+	BOOST_CHECK_EQUAL(d.fracBits(), 3);
+	BOOST_CHECK_EQUAL(d, CFxp(12, 28, 12, 3));
+	d = c + a;
+	BOOST_CHECK_EQUAL(d.width(), 12);
+	BOOST_CHECK_EQUAL(d.fracBits(), 3);
+	BOOST_CHECK_EQUAL(d, CFxp(12, 28, 12, 3));
 }
 
 BOOST_AUTO_TEST_CASE( CFxpScalarMultiplication )
