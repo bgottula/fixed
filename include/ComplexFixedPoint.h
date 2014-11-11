@@ -7,11 +7,6 @@
 #include "FixedPoint.h"
 
 
-/* TODO: Add support for a binary point. This would necessitate
- * overloading various operations to adjust it. Could also
- * add methods to convert to floating-point types.
- */
-
 class SizeMismatchException : public std::runtime_error
 {
 public: SizeMismatchException(void) :
