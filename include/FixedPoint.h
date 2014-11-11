@@ -19,10 +19,12 @@ class FixedPoint
 {
 public:
 
-	FixedPoint(std::int64_t r, unsigned int width)
+	FixedPoint(std::int64_t r, unsigned int width, 
+		unsigned int fractionalBits = 0)
 		: m_val(r)
 	{
 		setWidth(width);
+		setFractionalBits(fractionalBits);
 		checkSize();	
 	}
 
@@ -30,6 +32,7 @@ public:
 
 	int64_t val(void) const { return m_val; }
 	int width(void) const { return m_width; }
+	unsigned int fracBits(void) const { return m_fracBits; }
 	int64_t minVal(void) const { return m_minVal; }
 	int64_t maxVal(void) const { return m_maxVal; }
 
@@ -157,6 +160,7 @@ private:
 	std::int64_t m_val;
 
 	unsigned int m_width;
+	unsigned int m_fracBits;
 	std::int64_t m_maxVal;
 	std::int64_t m_minVal;
 
@@ -168,6 +172,15 @@ private:
 		m_width = width;
 		m_minVal = -(1LL << (width - 1));
 		m_maxVal = (1LL << (width - 1)) - 1;
+	}
+
+	void setFractionalBits(unsigned int fractionalBits)
+	{
+		if (fractionalBits > m_width)
+		{
+			throw std::range_error("Fractional bits outside allowed range");
+		}
+		m_fracBits = fractionalBits;
 	}
 
 	// throw exceptions?

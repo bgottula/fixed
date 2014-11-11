@@ -127,10 +127,11 @@ BOOST_AUTO_TEST_CASE( CFxpAddition )
 	BOOST_CHECK_EQUAL(d, CFxp(12, 28, 12, 3));
 }
 
+
 BOOST_AUTO_TEST_CASE( CFxpScalarMultiplication )
 {
-	CFxp a(1, 2, 8);
-	Fxp b(2, 5);
+	CFxp a(1, 2, 8, 1);
+	Fxp b(2, 5, 3);
 
 	/* multiplication by scalar is commutative */
 	BOOST_CHECK_EQUAL(a * b, b * a);
@@ -139,8 +140,9 @@ BOOST_AUTO_TEST_CASE( CFxpScalarMultiplication )
 	BOOST_CHECK_EQUAL((a * b).width(), 13);
 
 	/* result check */
-	BOOST_CHECK_EQUAL(a * b, CFxp(2, 4, 13));
+	BOOST_CHECK_EQUAL(a * b, CFxp(2, 4, 13, 4));
 }
+
 
 BOOST_AUTO_TEST_CASE( CFxpMultiplication )
 {

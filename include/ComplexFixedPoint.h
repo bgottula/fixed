@@ -92,13 +92,13 @@ public:
 	friend ComplexFixedPoint operator * (const ComplexFixedPoint &lhs, const FixedPoint &rhs)
 	{
 		return ComplexFixedPoint((complex<int64_t>)lhs * rhs.val(), 
-			lhs.width() + rhs.width());
+			lhs.width() + rhs.width(), lhs.fracBits() + rhs.fracBits());
 	}
 
 	friend ComplexFixedPoint operator * (const FixedPoint &lhs, const ComplexFixedPoint &rhs)
 	{
 		return ComplexFixedPoint((complex<int64_t>)rhs * lhs.val(), 
-			lhs.width() + rhs.width());
+			lhs.width() + rhs.width(), lhs.fracBits() + rhs.fracBits());
 	}
 
 	friend ComplexFixedPoint operator * (const ComplexFixedPoint &lhs, const ComplexFixedPoint &rhs)
