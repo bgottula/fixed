@@ -31,6 +31,24 @@ BOOST_AUTO_TEST_CASE( CFxpConstructors )
 	BOOST_CHECK_THROW(CFxp(0, 0, 2, 3), range_error);
 }
 
+BOOST_AUTO_TEST_CASE( CFxpQuantize )
+{
+	complex<double> a(2.34, -6.98);
+	complex<float> c(4.982, 9.12294847);
+	
+	/* Normal quantization */
+	CFxp b = CFxp::quantize(a, 12, 4);
+	BOOST_CHECK_EQUAL(b.real(), 37);
+	BOOST_CHECK_EQUAL(b.imag(), -112);
+	BOOST_CHECK_EQUAL(b.width(), 12);
+	BOOST_CHECK_EQUAL(b.fracBits(), 4);
+	BOOST_CHECK_CLOSE(b.toDouble().real(), 2.3125, 0.001);
+	BOOST_CHECK_CLOSE(b.toDouble().imag(), -7.0, 0.001);
+
+	/* Try to quantize with too few integer bits */
+	BOOST_CHECK_THROW(CFxp::quantize(a, 12, 10), range_error);
+}
+
 BOOST_AUTO_TEST_CASE( CFxpAccessors )
 {
 	CFxp a(1, 2, 8, 3);

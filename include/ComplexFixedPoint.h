@@ -22,6 +22,8 @@ class ComplexFixedPoint : public std::complex<std::int64_t>
 {
 public:
 
+	static const int MAX_WIDTH = 64;
+
 	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width,
 		unsigned int fractionalBits = 0)
 		: std::complex<int64_t>(r, i)
@@ -40,7 +42,16 @@ public:
 		checkSize();
 	}
 
-	static const int MAX_WIDTH = 64;
+	static ComplexFixedPoint quantize(std::complex<double> c, 
+		unsigned int width, unsigned int fractionalBits)
+	{
+		double multiplier = pow(2.0, fractionalBits);
+		return ComplexFixedPoint(
+			(int64_t)floor(c.real() * multiplier + 0.5),
+			(int64_t)floor(c.imag() * multiplier + 0.5),
+			width, fractionalBits
+		);
+	}
 
 	unsigned int width(void) const { return m_width; }
 	unsigned int fracBits(void) const { return m_fracBits; }
