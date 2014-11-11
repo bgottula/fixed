@@ -26,20 +26,26 @@ public:
 
 	ComplexFixedPoint(std::int64_t r, std::int64_t i, unsigned int width,
 		unsigned int fractionalBits = 0)
-		: std::complex<int64_t>(r, i)
+		: std::complex<int64_t>(r, i),
+		m_minHeldVal(INT64_MAX),
+		m_maxHeldVal(INT64_MIN)
 	{
 		setWidth(width);
 		setFractionalBits(fractionalBits);
 		checkSize();
+		updateMinMaxHeldVals();
 	}
 
 	ComplexFixedPoint(std::complex<int64_t> c, unsigned int width,
 		unsigned int fractionalBits = 0)
-		: std::complex<int64_t>(c)
+		: std::complex<int64_t>(c),
+		m_minHeldVal(0),
+		m_maxHeldVal(0)
 	{
 		setWidth(width);
 		setFractionalBits(fractionalBits);
 		checkSize();
+		updateMinMaxHeldVals();
 	}
 
 	static ComplexFixedPoint quantize(std::complex<double> c, 
@@ -57,6 +63,8 @@ public:
 	unsigned int fracBits(void) const { return m_fracBits; }
 	int64_t minVal(void) const { return m_minVal; }
 	int64_t maxVal(void) const { return m_maxVal; }
+	int64_t minHeldVal(void) const { return m_minHeldVal; }
+	int64_t maxHeldVal(void) const { return m_maxHeldVal; }
 
 	ComplexFixedPoint &operator = (const ComplexFixedPoint &rhs)
 	{
@@ -66,6 +74,7 @@ public:
 		}
 		std::complex<int64_t>::operator=(rhs);
 		checkSize();
+		updateMinMaxHeldVals();
 		return *this;
 	}
 
@@ -232,6 +241,8 @@ private:
 	unsigned int m_fracBits;
 	std::int64_t m_maxVal;
 	std::int64_t m_minVal;
+	std::int64_t m_minHeldVal;
+	std::int64_t m_maxHeldVal;
 
 	void setWidth(unsigned int width)
 	{
@@ -259,6 +270,29 @@ private:
 			|| (imag() > m_maxVal))
 		{
 			throw std::range_error("Values exceed size");
+		}
+	}
+
+	void updateMinMaxHeldVals(void)
+	{
+		if (real() > m_maxHeldVal)
+		{
+			m_maxHeldVal = real();
+		}
+		
+		if (imag() > m_maxHeldVal)
+		{
+			m_maxHeldVal = imag();
+		}
+
+		if (real() < m_minHeldVal)
+		{
+			m_minHeldVal = real();
+		}
+		
+		if (imag() < m_minHeldVal)
+		{
+			m_minHeldVal = imag();
 		}
 	}
 };

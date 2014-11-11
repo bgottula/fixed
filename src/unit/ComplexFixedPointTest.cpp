@@ -59,6 +59,12 @@ BOOST_AUTO_TEST_CASE( CFxpAccessors )
 	BOOST_CHECK_EQUAL(a.fracBits(), 3);
 	BOOST_CHECK_EQUAL(a.minVal(), -128);
 	BOOST_CHECK_EQUAL(a.maxVal(), 127);
+	BOOST_CHECK_EQUAL(a.maxHeldVal(), 2);
+	BOOST_CHECK_EQUAL(a.minHeldVal(), 1);
+	a = CFxp(123, -116, 8, 3);
+	BOOST_CHECK_EQUAL(a.maxHeldVal(), 123);
+	BOOST_CHECK_EQUAL(a.minHeldVal(), -116);
+
 }
 
 BOOST_AUTO_TEST_CASE( CFxpAssignment )
