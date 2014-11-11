@@ -118,7 +118,9 @@ public:
 
 		setWidth(m_width - numLsbsToRemove);
 		setFractionalBits(std::max((int)m_fracBits - (int)numLsbsToRemove, 0));
-		return (*this) >> numLsbsToRemove;
+		real(real() >> numLsbsToRemove);
+		imag(imag() >> numLsbsToRemove);
+		return *this;
 	}
 
 	ComplexFixedPoint &truncateTo(unsigned int newWidth)
@@ -213,20 +215,6 @@ private:
 	unsigned int m_fracBits;
 	std::int64_t m_maxVal;
 	std::int64_t m_minVal;
-
-	ComplexFixedPoint &operator >> (const int nbits)
-	{
-		real(real() >> nbits);
-		imag(imag() >> nbits);
-		return (*this);
-	}
-
-	ComplexFixedPoint &operator << (const int nbits)
-	{
-		real(real() << nbits);
-		imag(imag() << nbits);
-		return (*this);
-	}
 
 	void setWidth(unsigned int width)
 	{
