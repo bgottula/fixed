@@ -146,6 +146,8 @@ BOOST_AUTO_TEST_CASE( CFxpMultiplication )
 {
 	CFxp a(1, 2, 8);
 	CFxp b(2, 5, 5);
+	CFxp c(4, 12, 8, 3);
+	CFxp d(3, -7, 6, 1);
 
 	/* complex multiplication is commutative */
 	BOOST_CHECK_EQUAL(a * b, b * a);
@@ -158,6 +160,16 @@ BOOST_AUTO_TEST_CASE( CFxpMultiplication )
 
 	/* result check */
 	BOOST_CHECK_EQUAL(a * b, CFxp(-8, 9, 14));
+
+	/* handling of fractional bits */
+	CFxp e = c * d;
+	BOOST_CHECK_EQUAL(e.width(), 15);
+	BOOST_CHECK_EQUAL(e.fracBits(), 4);
+	BOOST_CHECK_EQUAL(e, CFxp(96, 8, 15, 4));
+	e = d * c;
+	BOOST_CHECK_EQUAL(e.width(), 15);
+	BOOST_CHECK_EQUAL(e.fracBits(), 4);
+	BOOST_CHECK_EQUAL(e, CFxp(96, 8, 15, 4));
 }
 
 

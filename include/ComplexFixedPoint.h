@@ -103,8 +103,10 @@ public:
 
 	friend ComplexFixedPoint operator * (const ComplexFixedPoint &lhs, const ComplexFixedPoint &rhs)
 	{
-		return ComplexFixedPoint((complex<int64_t>)lhs * (complex<int64_t>)rhs,
-			lhs.m_width + rhs.m_width + 1);
+		std::complex<int64_t> product = (complex<int64_t>)lhs * (complex<int64_t>)rhs;
+		int productWidth = lhs.m_width + rhs.m_width + 1;
+		int productFracBits = lhs.m_fracBits + rhs.m_fracBits;
+		return ComplexFixedPoint(product, productWidth, productFracBits);
 	}
 
 	ComplexFixedPoint &truncateBy(unsigned int numLsbsToRemove)
