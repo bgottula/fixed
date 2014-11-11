@@ -209,6 +209,12 @@ public:
 		return result / (float)pow(2.0, m_fracBits);
 	}
 
+	std::complex<double> toDouble(void)
+	{
+		std::complex<double> result(real(), imag());
+		return result / (double)pow(2.0, m_fracBits);
+	}
+
 private:
 
 	unsigned int m_width;

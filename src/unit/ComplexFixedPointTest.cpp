@@ -239,3 +239,16 @@ BOOST_AUTO_TEST_CASE( CFxpToFloat )
 	BOOST_CHECK_CLOSE(b.toFloat().real(), 15.0/pow(2.0, 64.0), 0.001);
 	BOOST_CHECK_CLOSE(b.toFloat().imag(), -32.0/pow(2.0, 64.0), 0.001);
 }
+
+BOOST_AUTO_TEST_CASE( CFxpToDouble )
+{
+	/* check a simple case */
+	CFxp a(15, -32, 10, 1);
+	BOOST_CHECK_CLOSE(a.toDouble().real(), 15.0/2.0, 0.001);
+	BOOST_CHECK_CLOSE(a.toDouble().imag(), -32.0/2.0, 0.001);
+
+	/* check an extreme case */
+	CFxp b(15, -32, 64, 64);
+	BOOST_CHECK_CLOSE(b.toDouble().real(), 15.0/pow(2.0, 64.0), 0.001);
+	BOOST_CHECK_CLOSE(b.toDouble().imag(), -32.0/pow(2.0, 64.0), 0.001);
+}
