@@ -44,7 +44,6 @@ CFxp &CFxp::operator = (const CFxp &rhs)
 		throw runtime_error("Size of lhs and rhs of assignment must match");
 	}
 	complex<int64_t>::operator=(rhs);
-	checkSize();
 	updateMinMaxHeldVals();
 	return *this;
 }
