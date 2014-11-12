@@ -140,7 +140,6 @@ BOOST_AUTO_TEST_CASE( FxpAddition )
 	BOOST_CHECK_EQUAL(d, Fxp(12, 12, 3));
 }
 
-
 BOOST_AUTO_TEST_CASE( FxpMultiplication )
 {
 	Fxp a(-13, 8);

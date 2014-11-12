@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 BOOST_AUTO_TEST_CASE( CFxpConstructors )
 {
 	/* Check constructors */
@@ -150,7 +149,6 @@ BOOST_AUTO_TEST_CASE( CFxpAddition )
 	BOOST_CHECK_EQUAL(d, CFxp(12, 28, 12, 3));
 }
 
-
 BOOST_AUTO_TEST_CASE( CFxpScalarMultiplication )
 {
 	CFxp a(1, 2, 8, 1);
@@ -165,7 +163,6 @@ BOOST_AUTO_TEST_CASE( CFxpScalarMultiplication )
 	/* result check */
 	BOOST_CHECK_EQUAL(a * b, CFxp(2, 4, 13, 4));
 }
-
 
 BOOST_AUTO_TEST_CASE( CFxpMultiplication )
 {
@@ -204,7 +201,6 @@ BOOST_AUTO_TEST_CASE( CFxpStreamInsertion )
 	out << a;
 	BOOST_CHECK_EQUAL(out.str(), "(2.5,-6.5)");
 }
-
 
 BOOST_AUTO_TEST_CASE( CFxpTruncation )
 {
