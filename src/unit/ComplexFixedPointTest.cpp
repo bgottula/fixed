@@ -34,7 +34,6 @@ BOOST_AUTO_TEST_CASE( CFxpConstructors )
 BOOST_AUTO_TEST_CASE( CFxpQuantize )
 {
 	complex<double> a(2.34, -6.98);
-	complex<float> c(4.982, 9.12294847);
 	
 	/* Normal quantization */
 	CFxp b = CFxp::quantize(a, 12, 4);
