@@ -2,195 +2,65 @@
 #define FIXED_POINT_H
 
 #include <cstdint>
-#include <cassert>
-#include <algorithm>
+#include <stdexcept>
+#include <iostream>
 
-
-/* TODO: Perhaps throw exceptions in addition to or in place of
- * assertions.
- */
-
-/* TODO: Add support for a binary point. This would necessitate
- * overloading various operations to adjust it. Could also
- * add methods to convert to floating-point types.
- */
+class FixedPoint;
+typedef FixedPoint Fxp;
 
 class FixedPoint
 {
 public:
 
-	FixedPoint(std::int64_t r, unsigned int width, 
-		unsigned int fractionalBits = 0)
-		: m_val(r)
-	{
-		setWidth(width);
-		setFractionalBits(fractionalBits);
-		checkSize();	
-	}
-
 	static const int MAX_WIDTH = 64;
 
+	FixedPoint(std::int64_t v, unsigned int width, 
+		unsigned int fractionalBits = 0);
+
+	static Fxp quantize(double v, unsigned int width, 
+		unsigned int fractionalBits);
+
 	int64_t val(void) const { return m_val; }
-	int width(void) const { return m_width; }
+	unsigned int width(void) const { return m_width; }
 	unsigned int fracBits(void) const { return m_fracBits; }
 	int64_t minVal(void) const { return m_minVal; }
 	int64_t maxVal(void) const { return m_maxVal; }
+	int64_t minHeldVal(void) const { return m_minHeldVal; }
+	int64_t maxHeldVal(void) const { return m_maxHeldVal; }
 
+	Fxp &operator = (const Fxp &rhs);
+	friend bool operator == (const Fxp &lhs, const Fxp & rhs);
+	bool operator != (const Fxp &rhs);
+	friend Fxp operator + (const Fxp &lhs, const Fxp &rhs);
+	friend Fxp operator * (const Fxp &lhs, const Fxp &rhs);
+	friend std::ostream& operator << (std::ostream& os, const Fxp &obj);
 
-	FixedPoint &operator = (const FixedPoint &rhs)
-	{
-		assert(rhs.m_width == m_width);
-		m_val = rhs.m_val;
-		return *this;
-	}
-
-
-	FixedPoint &operator >> (const int nbits)
-	{
-		m_val >>= nbits;
-		return *this;
-	}
-
-	FixedPoint &operator << (const int nbits)
-	{
-		m_val <<= nbits;
-		return *this;
-	}
-
-	
-	// add FixedPoint to this
-	FixedPoint &operator += (const FixedPoint &rhs)
-	{
-		setWidth(std::max(m_width, rhs.m_width) + 1);
-		m_val += rhs.m_val;
-		checkSize();
-		return *this;
-	}
-
-
-	friend FixedPoint operator+(FixedPoint lhs, const FixedPoint &rhs)
-	{
-		return lhs += rhs;
-	}
-
-	// multiplication
-	FixedPoint &operator *= (const FixedPoint &rhs)
-	{
-		setWidth(m_width + rhs.m_width);
-		m_val *= rhs.m_val;
-		checkSize();
-		return *this;
-	}
-
-	friend FixedPoint operator * (FixedPoint lhs, const FixedPoint &rhs)
-	{
-		return lhs *= rhs;
-	}
-	
-
-	FixedPoint &truncateBy(unsigned int numLsbsToRemove)
-	{
-		assert(numLsbsToRemove < m_width);
-		setWidth(m_width - numLsbsToRemove);
-		return (*this) >> numLsbsToRemove;
-	}
-
-	FixedPoint &truncateTo(unsigned int newWidth)
-	{
-		return truncateBy(m_width - newWidth);
-	}
-
-	FixedPoint &saturateTo(unsigned int newWidth)
-	{
-		assert(newWidth > 0);
-		assert(newWidth <= m_width);
-		setWidth(newWidth);
-		
-		if (m_val > m_maxVal)
-		{
-			m_val = m_maxVal;
-		}
-		else if (m_val < m_minVal)
-		{
-			m_val = m_minVal;
-		}
-
-		return *this;
-	}
-
-	FixedPoint &saturateBy(unsigned int numMsbsToRemove)
-	{
-		return saturateTo(m_width - numMsbsToRemove);
-	}
-
-	FixedPoint &roundBy(unsigned int numLsbsToRemove)
-	{
-		assert(numLsbsToRemove < m_width);
-
-		int roundUp = (m_val >> (numLsbsToRemove - 1)) & 0x1;
-		m_val >>= numLsbsToRemove;
-		m_val += roundUp;
-
-		setWidth(m_width - numLsbsToRemove);
-
-		return *this;
-	}
-
-	FixedPoint &roundTo(unsigned int newWidth)
-	{
-		return roundBy(m_width - newWidth);
-	}
-
-	FixedPoint &signExtendBy(unsigned int numMsbsToAdd)
-	{
-		assert(numMsbsToAdd + m_width <= MAX_WIDTH);
-		setWidth(m_width + numMsbsToAdd);
-		return *this;
-	}
-
-	FixedPoint &signExtendTo(unsigned int newWidth)
-	{
-		return signExtendBy(newWidth - m_width);
-	}
-
-
+	Fxp &truncateBy(unsigned int numLsbsToRemove);
+	Fxp &truncateTo(unsigned int newWidth);
+	Fxp &saturateTo(unsigned int newWidth);
+	Fxp &saturateBy(unsigned int numMsbsToRemove);
+	Fxp &roundBy(unsigned int numLsbsToRemove);
+	Fxp &roundTo(unsigned int newWidth);
+	Fxp &signExtendBy(unsigned int numMsbsToAdd);
+	Fxp &signExtendTo(unsigned int newWidth);
+	float toFloat(void) const;
+	double toDouble(void) const;
 
 private:
 
 	std::int64_t m_val;
-
 	unsigned int m_width;
 	unsigned int m_fracBits;
 	std::int64_t m_maxVal;
 	std::int64_t m_minVal;
+	std::int64_t m_minHeldVal;
+	std::int64_t m_maxHeldVal;
 
-
-	void setWidth(unsigned int width)
-	{
-		assert(width > 0);
-		assert(width <= MAX_WIDTH);
-		m_width = width;
-		m_minVal = -(1LL << (width - 1));
-		m_maxVal = (1LL << (width - 1)) - 1;
-	}
-
-	void setFractionalBits(unsigned int fractionalBits)
-	{
-		if (fractionalBits > m_width)
-		{
-			throw std::range_error("Fractional bits outside allowed range");
-		}
-		m_fracBits = fractionalBits;
-	}
-
-	// throw exceptions?
-	void checkSize(void)
-	{
-		assert(m_val >= m_minVal);
-		assert(m_val <= m_maxVal);
-	}
+	void setWidth(unsigned int width);
+	void setFractionalBits(unsigned int fractionalBits);
+	void checkSize(void);
+	void updateMinMaxHeldVals(void);
 };
 
-typedef FixedPoint Fxp;
 
 #endif

@@ -1,5 +1,5 @@
 # object files used to link all binaries
-OBJ_COMMON:=obj/ComplexFixedPoint.o
+OBJ_COMMON:=obj/ComplexFixedPoint.o obj/FixedPoint.o
 # object files used to link bin/test
 OBJ_TEST:=$(OBJ_COMMON) obj/unit/unit.o obj/unit/FixedPointTest.o obj/unit/ComplexFixedPointTest.o
 
