@@ -9,12 +9,6 @@
 class ComplexFixedPoint;
 typedef ComplexFixedPoint CFxp;
 
-class SizeMismatchException : public std::runtime_error
-{
-public: SizeMismatchException(void) :
-	std::runtime_error("Size of lhs and rhs of assignment must match") {};
-};
-
 class ComplexFixedPoint : public std::complex<std::int64_t>
 {
 public:

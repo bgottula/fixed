@@ -41,7 +41,7 @@ CFxp &CFxp::operator = (const CFxp &rhs)
 {
 	if (rhs.m_width != m_width || rhs.m_fracBits != m_fracBits)
 	{
-		throw SizeMismatchException();
+		throw runtime_error("Size of lhs and rhs of assignment must match");
 	}
 	complex<int64_t>::operator=(rhs);
 	checkSize();
