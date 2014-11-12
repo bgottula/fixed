@@ -47,8 +47,8 @@ public:
 	CFxp &roundTo(unsigned int newWidth);
 	CFxp &signExtendBy(unsigned int numMsbsToAdd);
 	CFxp &signExtendTo(unsigned int newWidth);
-	std::complex<float> toFloat(void);
-	std::complex<double> toDouble(void);
+	std::complex<float> toFloat(void) const;
+	std::complex<double> toDouble(void) const;
 
 private:
 

@@ -195,13 +195,13 @@ CFxp &CFxp::signExtendTo(unsigned int newWidth)
 	return signExtendBy(newWidth - m_width);
 }
 
-complex<float> CFxp::toFloat(void)
+complex<float> CFxp::toFloat(void) const
 {
 	complex<float> result(real(), imag());
 	return result / (float)pow(2.0, m_fracBits);
 }
 
-complex<double> CFxp::toDouble(void)
+complex<double> CFxp::toDouble(void) const
 {
 	complex<double> result(real(), imag());
 	return result / (double)pow(2.0, m_fracBits);
