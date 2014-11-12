@@ -38,6 +38,7 @@ public:
 	friend CFxp operator * (const CFxp &lhs, const FixedPoint &rhs);
 	friend CFxp operator * (const FixedPoint &lhs, const CFxp &rhs);
 	friend CFxp operator * (const CFxp &lhs, const CFxp &rhs);
+	friend std::ostream& operator << (std::ostream& os, const CFxp &obj);
 
 	CFxp &truncateBy(unsigned int numLsbsToRemove);
 	CFxp &truncateTo(unsigned int newWidth);

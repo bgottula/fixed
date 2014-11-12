@@ -197,6 +197,14 @@ BOOST_AUTO_TEST_CASE( CFxpMultiplication )
 	BOOST_CHECK_EQUAL(e, CFxp(96, 8, 15, 4));
 }
 
+BOOST_AUTO_TEST_CASE( CFxpStreamInsertion )
+{
+	stringstream out;
+	CFxp a(5, -13, 8, 1);
+	out << a;
+	BOOST_CHECK_EQUAL(out.str(), "(2.5,-6.5)");
+}
+
 
 BOOST_AUTO_TEST_CASE( CFxpTruncation )
 {

@@ -101,6 +101,11 @@ CFxp operator * (const CFxp &lhs, const CFxp &rhs)
 	return CFxp(product, productWidth, productFracBits);
 }
 
+std::ostream& operator << (std::ostream& os, const CFxp &obj)
+{
+	return os << obj.toDouble();
+}
+
 CFxp &CFxp::truncateBy(unsigned int numLsbsToRemove)
 {
 	if (numLsbsToRemove >= m_width)
