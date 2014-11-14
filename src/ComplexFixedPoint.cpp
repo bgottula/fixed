@@ -1,4 +1,5 @@
 #include "ComplexFixedPoint.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -69,13 +70,13 @@ CFxp operator + (const CFxp &lhs, const CFxp &rhs)
 	int sumWidth = max(lhs.m_width, rhs.m_width) + 1 + abs(fracBitsDifference);
 	if (fracBitsDifference > 0)
 	{
-		sum = (complex<int64_t>)lhs * (1L << fracBitsDifference) 
+		sum = (complex<int64_t>)lhs * (1LL << fracBitsDifference) 
 			+ (complex<int64_t>)rhs;
 	}
 	else
 	{
 		sum = (complex<int64_t>)lhs 
-			+ (complex<int64_t>)rhs * (1L << -fracBitsDifference);
+			+ (complex<int64_t>)rhs * (1LL << -fracBitsDifference);
 	}
 
 	return CFxp(sum, sumWidth, sumFracBits);
@@ -202,13 +203,13 @@ CFxp &CFxp::signExtendTo(unsigned int newWidth)
 
 complex<float> CFxp::toFloat(void) const
 {
-	complex<float> result(real(), imag());
+	complex<float> result((float)real(), (float)imag());
 	return result / (float)pow(2.0, m_fracBits);
 }
 
 complex<double> CFxp::toDouble(void) const
 {
-	complex<double> result(real(), imag());
+	complex<double> result((double)real(), (double)imag());
 	return result / (double)pow(2.0, m_fracBits);
 }
 

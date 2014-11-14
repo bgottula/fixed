@@ -1,5 +1,6 @@
 #include "FixedPoint.h"
 #include <math.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -54,11 +55,11 @@ Fxp operator + (const Fxp &lhs, const Fxp &rhs)
 	int sumWidth = max(lhs.m_width, rhs.m_width) + 1 + abs(fracBitsDifference);
 	if (fracBitsDifference > 0)
 	{
-		sum = lhs.m_val * (1L << fracBitsDifference) + rhs.m_val;
+		sum = lhs.m_val * (1LL << fracBitsDifference) + rhs.m_val;
 	}
 	else
 	{
-		sum = lhs.m_val	+ rhs.m_val * (1L << -fracBitsDifference);
+		sum = lhs.m_val	+ rhs.m_val * (1LL << -fracBitsDifference);
 	}
 
 	return Fxp(sum, sumWidth, sumFracBits);
