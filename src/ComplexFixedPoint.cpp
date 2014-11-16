@@ -70,13 +70,13 @@ CFxp operator + (const CFxp &lhs, const CFxp &rhs)
 	int sumWidth = max(lhs.m_width, rhs.m_width) + 1 + abs(fracBitsDifference);
 	if (fracBitsDifference > 0)
 	{
-		sum = (complex<int64_t>)lhs * (1LL << fracBitsDifference) 
+		sum = (complex<int64_t>)lhs * (int64_t)(1LL << fracBitsDifference) 
 			+ (complex<int64_t>)rhs;
 	}
 	else
 	{
 		sum = (complex<int64_t>)lhs 
-			+ (complex<int64_t>)rhs * (1LL << -fracBitsDifference);
+			+ (complex<int64_t>)rhs * (int64_t)(1LL << -fracBitsDifference);
 	}
 
 	return CFxp(sum, sumWidth, sumFracBits);
